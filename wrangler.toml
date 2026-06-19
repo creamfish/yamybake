@@ -1,0 +1,18 @@
+name = "yamybake-pay"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# 非機密設定可放這裡（密鑰請改用 wrangler secret put，不要寫在這裡）
+[vars]
+# 付款完成後「返回商店」按鈕的網址 → 指到你的感謝頁
+CLIENT_BACK_URL = "https://你的帳號.github.io/yamybake/thanks.html"
+# 只允許你的網站呼叫（建議正式上線時填你的 Pages 網址，先用 * 測試也可）
+ALLOW_ORIGIN = "*"
+SHOP_NAME = "yamybake"
+# 測試環境用 "stage"，正式上線改成 "production"（並先設好下方三個密鑰）
+ECPAY_ENV = "stage"
+
+# 正式上線時，用以下指令設定（不會出現在程式碼，也不會上傳 GitHub）：
+#   wrangler secret put ECPAY_MERCHANT_ID
+#   wrangler secret put ECPAY_HASH_KEY
+#   wrangler secret put ECPAY_HASH_IV

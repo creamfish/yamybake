@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yamybake ・ 手作烘焙</title>
+<meta name="description" content="yamybake 手作烘焙坊。每日新鮮製作的蛋糕、餅乾與常溫點心，線上瀏覽與下單。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF5EC;
+    --paper-2:#F3E9D6;
+    --card:#FFFCF6;
+    --ink:#2E211A;
+    --ink-soft:#6B5A4E;
+    --berry:#CC4A63;
+    --berry-deep:#A8364D;
+    --caramel:#DFA45C;
+    --pistachio:#8FA76B;
+    --line:rgba(46,33,26,.12);
+    --line-strong:rgba(46,33,26,.22);
+    --shadow:0 18px 40px -24px rgba(46,33,26,.45);
+    --serif-tc:"Noto Serif TC",serif;
+    --serif-en:"Fraunces",serif;
+    --sans:"Noto Sans TC",system-ui,sans-serif;
+    --r:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.7;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  h1,h2,h3{margin:0;line-height:1.2;font-weight:700}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  .wrap{width:min(1140px,92vw);margin-inline:auto}
+  .en{font-family:var(--serif-en);font-style:italic;font-weight:500}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:60;
+    background:rgba(251,245,236,.82);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+  .brand{display:flex;align-items:baseline;gap:.5ch;text-decoration:none;letter-spacing:.5px}
+  .brand .mark{font-family:var(--serif-en);font-style:italic;font-weight:600;font-size:1.55rem}
+  .brand .dot{color:var(--berry);font-size:1.55rem;font-family:var(--serif-en)}
+  .brand .tag{font-size:.72rem;color:var(--ink-soft);letter-spacing:.28em;text-transform:uppercase;font-weight:500}
+  nav.links{display:flex;gap:30px;align-items:center}
+  nav.links a{text-decoration:none;font-size:.92rem;font-weight:500;color:var(--ink-soft);transition:color .2s}
+  nav.links a:hover{color:var(--ink)}
+  .cart-btn{
+    position:relative;display:inline-flex;align-items:center;gap:8px;
+    background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:999px;
+    font-size:.9rem;font-weight:500;transition:transform .18s,background .2s;
+  }
+  .cart-btn:hover{transform:translateY(-1px);background:#3d2c22}
+  .cart-count{
+    background:var(--berry);color:#fff;border-radius:999px;min-width:20px;height:20px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;padding:0 5px;
+  }
+  .menu-toggle{display:none}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;padding:74px 0 90px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--berry-deep);font-weight:700;margin-bottom:22px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--berry)}
+  .hero h1{font-family:var(--serif-tc);font-weight:900;font-size:clamp(2.5rem,6vw,4.3rem);letter-spacing:-.5px}
+  .hero h1 em{font-family:var(--serif-en);font-style:italic;font-weight:500;color:var(--berry)}
+  .hero p.lede{font-size:1.08rem;color:var(--ink-soft);margin:24px 0 34px;max-width:42ch}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:.96rem;text-decoration:none;transition:transform .18s,box-shadow .2s,background .2s,color .2s}
+  .btn-primary{background:var(--berry);color:#fff;box-shadow:0 12px 26px -14px var(--berry)}
+  .btn-primary:hover{transform:translateY(-2px);background:var(--berry-deep)}
+  .btn-ghost{border:1.5px solid var(--line-strong);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+
+  /* hero visual — stacked plate + seal */
+  .hero-visual{position:relative;aspect-ratio:1/1;border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 38%, #fff7ea 0 38%, transparent 39%),
+      radial-gradient(circle at 50% 50%, var(--paper-2) 0 70%, transparent 71%),
+      conic-gradient(from 200deg, #f6ddc6, #f7e7d2, #fbe2d2, #f6ddc6);
+    box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid var(--line)}
+  .hero-photo{width:78%;aspect-ratio:1/1;border-radius:50%;object-fit:cover;border:6px solid #fff;box-shadow:0 22px 44px -22px rgba(46,33,26,.5);
+    background:repeating-linear-gradient(135deg,#f0d9bf 0 14px,#ecd0b1 14px 28px);display:grid;place-items:center;color:var(--ink-soft);text-align:center;font-size:.85rem;padding:20px}
+  .seal{position:absolute;right:-6px;bottom:6%;width:118px;height:118px;border-radius:50%;
+    background:var(--ink);color:var(--paper);display:grid;place-items:center;text-align:center;
+    font-size:.66rem;letter-spacing:.12em;line-height:1.5;font-weight:600;transform:rotate(-8deg);
+    border:2px dashed rgba(251,245,236,.5);box-shadow:var(--shadow)}
+  .seal b{font-family:var(--serif-tc);font-size:.95rem;display:block;letter-spacing:.05em}
+  .float-tag{position:absolute;left:-10px;top:14%;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:10px 16px;box-shadow:var(--shadow);font-size:.82rem;font-weight:500}
+  .float-tag b{color:var(--berry)}
+
+  /* scallop divider — the signature piped-cream edge */
+  .scallop{display:block;width:100%;height:34px;color:var(--paper)}
+  .band{background:var(--paper-2)}
+
+  /* ---------- VALUES strip ---------- */
+  .values{background:var(--paper-2);padding:26px 0}
+  .values-in{display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
+  .value{display:flex;align-items:center;gap:12px;font-size:.92rem;color:var(--ink-soft);font-weight:500}
+  .value .ic{width:38px;height:38px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.1rem;border:1px solid var(--line)}
+
+  /* ---------- MENU ---------- */
+  section.menu{padding:84px 0}
+  .sec-head{text-align:center;margin-bottom:46px}
+  .sec-head .kicker{font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--berry-deep);font-weight:700}
+  .sec-head h2{font-family:var(--serif-tc);font-size:clamp(1.9rem,4vw,2.8rem);margin-top:10px}
+  .sec-head p{color:var(--ink-soft);max-width:52ch;margin:14px auto 0}
+  .cats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+  .cat{padding:9px 20px;border-radius:999px;border:1.5px solid var(--line-strong);font-size:.9rem;font-weight:500;color:var(--ink-soft);background:transparent;transition:all .2s}
+  .cat[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .cat:hover{border-color:var(--ink)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .22s,box-shadow .22s}
+  .card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+  .thumb{aspect-ratio:4/3;position:relative;display:grid;place-items:center;color:#fff;font-family:var(--serif-tc);font-size:1.3rem;text-align:center;padding:18px}
+  .thumb .ph{position:absolute;inset:0;opacity:.92}
+  .thumb span{position:relative;z-index:2;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .badge{position:absolute;z-index:3;top:12px;left:12px;background:#fff;color:var(--berry-deep);font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.04em}
+  .card-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card-body h3{font-family:var(--serif-tc);font-size:1.18rem}
+  .card-body .desc{font-size:.88rem;color:var(--ink-soft);flex:1}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .price{font-family:var(--serif-en);font-style:normal;font-weight:600;font-size:1.25rem}
+  .price small{font-size:.8rem;color:var(--ink-soft);font-family:var(--sans);font-weight:400}
+  .add{display:inline-flex;align-items:center;gap:7px;background:var(--paper-2);color:var(--ink);
+    padding:9px 16px;border-radius:999px;font-size:.86rem;font-weight:600;transition:background .2s,transform .15s}
+  .add:hover{background:var(--berry);color:#fff}
+  .add:active{transform:scale(.95)}
+
+  /* ---------- STORY ---------- */
+  .story{padding:84px 0;background:var(--paper-2)}
+  .story-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:54px;align-items:center}
+  .story-img{aspect-ratio:4/5;border-radius:var(--r);background:repeating-linear-gradient(135deg,#ecd6bb 0 16px,#e6cdaf 16px 32px);
+    display:grid;place-items:center;color:var(--ink-soft);text-align:center;padding:24px;box-shadow:var(--shadow);font-size:.88rem}
+  .story h2{font-family:var(--serif-tc);font-size:clamp(1.8rem,3.6vw,2.5rem);margin-bottom:20px}
+  .story p{color:var(--ink-soft);margin:0 0 16px}
+  .sign{font-family:var(--serif-en);font-style:italic;font-size:1.5rem;color:var(--berry);margin-top:24px}
+
+  /* ---------- ORDER INFO ---------- */
+  .info{padding:84px 0}
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:14px}
+  .info-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px 26px}
+  .info-card .n{font-family:var(--serif-en);font-style:italic;font-size:1.4rem;color:var(--berry);font-weight:600}
+  .info-card h3{font-family:var(--serif-tc);font-size:1.2rem;margin:8px 0 10px}
+  .info-card p{color:var(--ink-soft);font-size:.92rem;margin:0}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:var(--paper);padding:60px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:40px}
+  footer .mark{font-family:var(--serif-en);font-style:italic;font-weight:600;font-size:1.7rem}
+  footer p{color:rgba(251,245,236,.7);font-size:.92rem;margin:14px 0 0}
+  footer h4{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(251,245,236,.55);margin:0 0 16px;font-weight:600}
+  footer a{display:block;text-decoration:none;color:rgba(251,245,236,.85);font-size:.92rem;margin-bottom:10px;transition:color .2s}
+  footer a:hover{color:#fff}
+  .foot-bottom{border-top:1px solid rgba(251,245,236,.15);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.82rem;color:rgba(251,245,236,.55)}
+
+  /* ---------- CART DRAWER ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(46,33,26,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
+  .overlay.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100vw);background:var(--paper);z-index:100;
+    transform:translateX(100%);transition:transform .34s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 50px -20px rgba(0,0,0,.4)}
+  .drawer.open{transform:none}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--line)}
+  .drawer-head h3{font-family:var(--serif-tc);font-size:1.3rem}
+  .close{font-size:1.6rem;line-height:1;color:var(--ink-soft);width:36px;height:36px;border-radius:50%;transition:background .2s}
+  .close:hover{background:var(--paper-2)}
+  .drawer-body{flex:1;overflow-y:auto;padding:8px 24px}
+  .empty{text-align:center;color:var(--ink-soft);padding:60px 10px}
+  .empty .big{font-size:2.4rem;margin-bottom:10px}
+  .line-item{display:flex;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .li-thumb{width:62px;height:62px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;color:#fff;font-size:.7rem;text-align:center;font-weight:600}
+  .li-main{flex:1;min-width:0}
+  .li-main .nm{font-weight:600;font-size:.95rem}
+  .li-main .pr{color:var(--ink-soft);font-size:.85rem}
+  .qty{display:inline-flex;align-items:center;gap:0;border:1px solid var(--line-strong);border-radius:999px;margin-top:8px}
+  .qty button{width:28px;height:28px;font-size:1rem;color:var(--ink);display:grid;place-items:center;border-radius:50%}
+  .qty button:hover{color:var(--berry)}
+  .qty span{min-width:26px;text-align:center;font-size:.9rem;font-weight:600}
+  .li-remove{align-self:flex-start;color:var(--ink-soft);font-size:.78rem;text-decoration:underline;margin-top:2px}
+  .li-remove:hover{color:var(--berry)}
+  .drawer-foot{padding:20px 24px;border-top:1px solid var(--line);background:var(--card)}
+  .total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+  .total-row .lab{color:var(--ink-soft);font-size:.92rem}
+  .total-row .amt{font-family:var(--serif-en);font-weight:600;font-size:1.7rem}
+  .checkout-btn{width:100%;background:var(--berry);color:#fff;padding:15px;border-radius:999px;font-size:1rem;font-weight:600;transition:background .2s}
+  .checkout-btn:hover{background:var(--berry-deep)}
+  .checkout-btn:disabled{background:var(--line-strong);cursor:not-allowed}
+
+  /* checkout form */
+  .form-field{margin-bottom:14px}
+  .form-field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px}
+  .form-field input,.form-field select,.form-field textarea{
+    width:100%;padding:11px 14px;border:1px solid var(--line-strong);border-radius:12px;font-family:inherit;font-size:.92rem;background:#fff;color:var(--ink)}
+  .form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:2px solid var(--berry);outline-offset:1px;border-color:var(--berry)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .back-link{font-size:.85rem;color:var(--ink-soft);text-decoration:underline;margin-bottom:14px;display:inline-block}
+  .send-actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .btn-line{background:#06C755;color:#fff;width:100%;padding:14px;border-radius:999px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-line:hover{filter:brightness(.95)}
+  .btn-copy{background:var(--paper-2);color:var(--ink);width:100%;padding:13px;border-radius:999px;font-weight:600}
+  .btn-copy:hover{background:var(--line-strong)}
+  .order-preview{background:#fff;border:1px dashed var(--line-strong);border-radius:12px;padding:14px;font-size:.82rem;white-space:pre-wrap;color:var(--ink-soft);max-height:140px;overflow:auto;margin-bottom:14px}
+
+  /* toast */
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);padding:13px 24px;border-radius:999px;font-size:.9rem;font-weight:500;
+    opacity:0;pointer-events:none;transition:all .3s;z-index:200;box-shadow:var(--shadow)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    .hero-visual{max-width:380px;margin-inline:auto;order:-1}
+    .story-grid{grid-template-columns:1fr;gap:30px}
+    .grid{grid-template-columns:repeat(2,1fr);gap:18px}
+    .info-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr;gap:28px}
+    nav.links{display:none}
+    .menu-toggle{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--paper-2)}
+    nav.links.show{display:flex;position:absolute;top:100%;left:0;right:0;background:var(--paper);flex-direction:column;gap:0;padding:8px 0;border-bottom:1px solid var(--line)}
+    nav.links.show a{padding:13px 6vw;width:100%}
+  }
+  @media(max-width:540px){
+    .grid{grid-template-columns:1fr}
+    .values-in{justify-content:flex-start}
+    .form-row{grid-template-columns:1fr}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;scroll-behavior:auto}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand">
+      <span class="mark">yamybake</span><span class="dot">.</span>
+      <span class="tag">手作烘焙</span>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#menu">商品</a>
+      <a href="#story">關於我們</a>
+      <a href="#info">訂購須知</a>
+      <a href="#contact">聯絡</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="cart-btn" id="openCart" aria-label="開啟購物車">
+        🛒 購物車 <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="選單">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">手作餅乾・常溫點心</span>
+      <h1>裝進鐵盒的<br>剛剛好的<em>甜</em></h1>
+      <p class="lede">yamybake 專做手作餅乾與常溫點心。一口一塊的酥香、耐放好送的體貼，無論是給自己的下午茶，還是想送人的心意，都能線上挑選、結帳，宅配到家。</p>
+      <div class="hero-cta">
+        <a href="#menu" class="btn btn-primary">挑選餅乾 →</a>
+        <a href="#story" class="btn btn-ghost">關於 yamybake</a>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="hero-visual">
+        <!-- 換成你的招牌甜點照：把下面 div 換成 <img src="images/hero.jpg" class="hero-photo" alt="..."> -->
+        <div class="hero-photo">主視覺照片<br>（餅乾鐵盒・請替換）</div>
+        <div class="seal"><span>手作<br><b>小量烘焙</b><br>handmade</span></div>
+        <div class="float-tag">人氣禮盒 <b>綜合餅乾</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<svg class="scallop" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0,34 V12 C50,12 50,0 100,0 S150,12 200,12 250,0 300,0 350,12 400,12 450,0 500,0 550,12 600,12 650,0 700,0 750,12 800,12 850,0 900,0 950,12 1000,12 1050,0 1100,0 1150,12 1200,12 V34 Z" style="color:var(--paper-2)"></path></svg>
+
+<!-- ============ VALUES ============ -->
+<div class="values">
+  <div class="wrap values-in">
+    <div class="value"><span class="ic">🌾</span>嚴選天然奶油</div>
+    <div class="value"><span class="ic">🍪</span>小量烘焙更新鮮</div>
+    <div class="value"><span class="ic">📦</span>常溫保存好宅配</div>
+    <div class="value"><span class="ic">🎁</span>禮盒包裝可客製</div>
+  </div>
+</div>
+
+<!-- ============ MENU ============ -->
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Our Menu</span>
+      <h2>餅乾與常溫點心</h2>
+      <p>以下為示範品項與價格，請依實際商品替換。點選分類篩選，喜歡的就放進購物車，結帳後可線上刷卡付款。</p>
+    </div>
+    <div class="cats" id="cats"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="story" id="story">
+  <div class="wrap story-grid">
+    <div class="story-img reveal">品牌／工作室照片<br>（請替換 images/story.jpg）</div>
+    <div class="reveal">
+      <span class="kicker" style="color:var(--berry-deep);font-weight:700;letter-spacing:.24em;text-transform:uppercase;font-size:.78rem">Our Story</span>
+      <h2>從一爐餅乾開始的分享</h2>
+      <p>（這段是品牌故事的佔位文字）yamybake 最初只是烤給家人朋友的一爐餅乾。因為大家總說「這個一定要做來賣」，我們就把那份單純的喜歡，慢慢變成了一盒盒能寄到你手上的點心。</p>
+      <p>我們堅持小量烘焙、用真材實料，不為了延長保存而過度添加。常溫好保存、好攜帶，自己吃療癒，送人也體面。</p>
+      <div class="sign">— yamy</div>
+    </div>
+  </div>
+</section>
+
+<svg class="scallop" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true" style="transform:scaleY(-1)"><path fill="currentColor" d="M0,34 V12 C50,12 50,0 100,0 S150,12 200,12 250,0 300,0 350,12 400,12 450,0 500,0 550,12 600,12 650,0 700,0 750,12 800,12 850,0 900,0 950,12 1000,12 1050,0 1100,0 1150,12 1200,12 V34 Z" style="color:var(--paper-2)"></path></svg>
+
+<!-- ============ ORDER INFO ============ -->
+<section class="info" id="info">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">How to Order</span>
+      <h2>訂購須知</h2>
+      <p>下單前請先看看這裡，以下內容請依你的實際出貨方式調整。</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-card reveal"><div class="n">01</div><h3>選購與付款</h3><p>加入購物車後線上結帳，支援信用卡與 ATM（綠界 ECPay 安全付款）。需要客製或大量訂購，可改用 LINE 詢問。</p></div>
+      <div class="info-card reveal"><div class="n">02</div><h3>製作與出貨</h3><p>多數品項採接單後小量烘焙，約 2–4 個工作天出貨。常溫宅配到府，運費與到貨時間以結帳與確認訊息為準。</p></div>
+      <div class="info-card reveal"><div class="n">03</div><h3>禮盒與客製</h3><p>彌月、節慶、活動禮盒都可客製卡片與內容。數量較多享優惠，歡迎透過 LINE 告訴我們需求與日期。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <span class="mark">yamybake.</span>
+        <p>每日新鮮手作的蛋糕、餅乾與常溫點心。<br>用最單純的材料，做最剛好的甜。</p>
+      </div>
+      <div>
+        <h4>逛逛</h4>
+        <a href="#menu">商品</a>
+        <a href="#story">關於我們</a>
+        <a href="#info">訂購須知</a>
+      </div>
+      <div>
+        <h4>聯絡我們</h4>
+        <a href="https://www.instagram.com/yamybake_/" target="_blank" rel="noopener">Instagram @yamybake_</a>
+        <a href="#" id="lineFoot" target="_blank" rel="noopener">LINE 下單（請填入連結）</a>
+        <a href="mailto:hello@yamybake.com">hello@yamybake.com（請替換）</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> yamybake ・ 手作烘焙</span>
+      <span>Made with 🧁 for our customers</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="購物車" aria-hidden="true">
+  <div class="drawer-head">
+    <h3 id="drawerTitle">你的購物車</h3>
+    <button class="close" id="closeCart" aria-label="關閉">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   1) 商品資料 — 直接在這裡編輯你的真實商品
+   - 沒有照片時用 color 當底色佔位；之後加上 img: "images/xxx.jpg"
+   - cat 是分類，會自動產生分類篩選按鈕
+   ===================================================================== */
+const PRODUCTS = [
+  { id:"p1", name:"海鹽巧克力曲奇", cat:"餅乾", price:200, color:"#5A3A2E",
+    desc:"濃郁可可加上一撮海鹽，外酥內軟，6 入。", badge:"熱賣", img:"" },
+  { id:"p2", name:"伯爵奶茶酥餅", cat:"餅乾", price:180, color:"#8A6A4F",
+    desc:"伯爵茶葉揉進奶油酥餅，茶香迷人，8 入。", badge:"", img:"" },
+  { id:"p3", name:"開心果方塊酥", cat:"餅乾", price:220, color:"#8FA76B",
+    desc:"滿滿開心果香，一口接一口的危險點心，8 入。", badge:"", img:"" },
+  { id:"p4", name:"原味丹麥曲奇", cat:"餅乾", price:160, color:"#C98A4B",
+    desc:"經典奶油香，酥到入口即化，10 入。", badge:"", img:"" },
+  { id:"p5", name:"焦糖瑪德蓮", cat:"常溫點心", price:150, color:"#C98A4B",
+    desc:"貝殼造型奶油小蛋糕，帶焦糖尾韻，6 入。", badge:"", img:"" },
+  { id:"p6", name:"原味達克瓦茲", cat:"常溫點心", price:160, color:"#DFA45C",
+    desc:"外脆內軟的法式杏仁蛋白餅，5 入。", badge:"", img:"" },
+  { id:"p7", name:"檸檬磅蛋糕", cat:"常溫點心", price:260, color:"#C9A227",
+    desc:"新鮮檸檬皮與糖霜，常溫可放數日，整條裝。", badge:"", img:"" },
+  { id:"p8", name:"綜合餅乾禮盒", cat:"禮盒", price:560, color:"#A8364D",
+    desc:"嚴選人氣餅乾組合，附提袋，送禮體面。", badge:"送禮推薦", img:"" },
+  { id:"p9", name:"彌月／節慶禮盒", cat:"禮盒", price:680, color:"#CC4A63",
+    desc:"可客製卡片與內容，數量多可洽詢優惠。", badge:"可客製", img:"" },
+];
+
+/* 你的聯絡與金流設定 — 換成真實資料 */
+const SHOP = {
+  name: "yamybake",
+  lineUrl: "https://line.me/R/ti/p/@你的LINE_ID",   // ← 換成你的 LINE 官方帳號連結
+  email: "hello@yamybake.com",                        // ← 換成你的 Email
+  currency: "NT$",
+  // ↓ 線上付款端點：部署 worker.js 到 Cloudflare 後，把網址貼這裡
+  //   先留空字串 "" 也可以，付款按鈕會提示尚未設定。
+  payEndpoint: "https://yamybake-pay.你的子網域.workers.dev"
+};
+
+/* =====================================================================
+   2) 以下為功能程式，一般不需要修改
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const fmt = n => SHOP.currency + n.toLocaleString();
+let cart = loadCart();
+let activeCat = "全部";
+
+/* ---- 渲染分類 ---- */
+function renderCats(){
+  const cats = ["全部", ...new Set(PRODUCTS.map(p=>p.cat))];
+  $("#cats").innerHTML = cats.map(c =>
+    `<button class="cat" data-cat="${c}" aria-pressed="${c===activeCat}">${c}</button>`).join("");
+  $("#cats").querySelectorAll(".cat").forEach(b=>{
+    b.onclick = ()=>{ activeCat = b.dataset.cat; renderCats(); renderGrid(); };
+  });
+}
+
+/* ---- 渲染商品 ---- */
+function renderGrid(){
+  const list = activeCat==="全部" ? PRODUCTS : PRODUCTS.filter(p=>p.cat===activeCat);
+  $("#grid").innerHTML = list.map(p=>`
+    <article class="card reveal in">
+      <div class="thumb" style="background:${p.color}">
+        ${p.img ? `<img class="ph" src="${p.img}" alt="${p.name}">` : `<div class="ph" style="background:${p.color}"></div>`}
+        ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
+        ${p.img ? "" : `<span>${p.name}</span>`}
+      </div>
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <p class="desc">${p.desc}</p>
+        <div class="card-foot">
+          <div class="price">${fmt(p.price)}</div>
+          <button class="add" data-add="${p.id}">＋ 加入</button>
+        </div>
+      </div>
+    </article>`).join("");
+  $("#grid").querySelectorAll("[data-add]").forEach(b=>{
+    b.onclick = ()=>{ addToCart(b.dataset.add); };
+  });
+}
+
+/* ---- 購物車邏輯 ---- */
+function addToCart(id){
+  cart[id] = (cart[id]||0) + 1;
+  saveCart(); updateCount(); renderDrawer();
+  const p = PRODUCTS.find(x=>x.id===id);
+  toast(`已加入「${p.name}」`);
+}
+function changeQty(id, d){
+  cart[id] = (cart[id]||0) + d;
+  if(cart[id] <= 0) delete cart[id];
+  saveCart(); updateCount(); renderDrawer();
+}
+function removeItem(id){ delete cart[id]; saveCart(); updateCount(); renderDrawer(); }
+function cartItems(){ return Object.keys(cart).map(id=>({...PRODUCTS.find(p=>p.id===id), qty:cart[id]})).filter(x=>x.id); }
+function cartTotal(){ return cartItems().reduce((s,i)=>s+i.price*i.qty,0); }
+function updateCount(){
+  const n = cartItems().reduce((s,i)=>s+i.qty,0);
+  $("#cartCount").textContent = n;
+}
+
+/* ---- 抽屜：購物車檢視 ---- */
+function renderDrawer(){
+  const items = cartItems();
+  $("#drawerTitle").textContent = "你的購物車";
+  if(items.length===0){
+    $("#drawerBody").innerHTML = `<div class="empty"><div class="big">🧺</div>購物車是空的<br><span style="font-size:.88rem">挑幾樣喜歡的甜點吧</span></div>`;
+    $("#drawerFoot").innerHTML = "";
+    return;
+  }
+  $("#drawerBody").innerHTML = items.map(i=>`
+    <div class="line-item">
+      <div class="li-thumb" style="background:${i.color}">${i.img?`<img src="${i.img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:i.name}</div>
+      <div class="li-main">
+        <div class="nm">${i.name}</div>
+        <div class="pr">${fmt(i.price)}</div>
+        <div class="qty">
+          <button data-minus="${i.id}" aria-label="減少">−</button>
+          <span>${i.qty}</span>
+          <button data-plus="${i.id}" aria-label="增加">＋</button>
+        </div>
+      </div>
+      <button class="li-remove" data-rm="${i.id}">移除</button>
+    </div>`).join("");
+  $("#drawerFoot").innerHTML = `
+    <div class="total-row"><span class="lab">小計</span><span class="amt">${fmt(cartTotal())}</span></div>
+    <button class="checkout-btn" id="goCheckout">前往結帳 →</button>`;
+  $("#drawerBody").querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.plus,1));
+  $("#drawerBody").querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.minus,-1));
+  $("#drawerBody").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>removeItem(b.dataset.rm));
+  $("#goCheckout").onclick = renderCheckout;
+}
+
+/* ---- 抽屜：結帳表單 ---- */
+function renderCheckout(){
+  $("#drawerTitle").textContent = "填寫訂購資料";
+  $("#drawerBody").innerHTML = `
+    <a class="back-link" id="backToCart">← 回到購物車</a>
+    <div class="form-field"><label for="f-name">姓名／稱呼 *</label><input id="f-name" placeholder="王小美"></div>
+    <div class="form-row">
+      <div class="form-field"><label for="f-phone">電話 *</label><input id="f-phone" placeholder="09xx-xxx-xxx"></div>
+      <div class="form-field"><label for="f-date">希望取貨日</label><input id="f-date" type="date"></div>
+    </div>
+    <div class="form-field"><label for="f-method">取貨方式</label>
+      <select id="f-method"><option>門市自取</option><option>宅配（冷藏）</option><option>宅配（常溫）</option><option>面交</option></select>
+    </div>
+    <div class="form-field"><label for="f-note">備註（口味、地址、客製需求…）</label><textarea id="f-note" rows="2" placeholder="例：草莓生乳捲不要太甜"></textarea></div>
+    <div class="form-field"><label>訂單明細</label><div class="order-preview" id="orderPreview"></div></div>`;
+  $("#drawerFoot").innerHTML = `
+    <div class="total-row"><span class="lab">應付金額</span><span class="amt">${fmt(cartTotal())}</span></div>
+    <div class="send-actions">
+      <button class="checkout-btn" id="payNow" style="margin-bottom:2px">前往付款（信用卡／ATM）→</button>
+      <button class="btn-line" id="sendLine">用 LINE 詢問或客製</button>
+      <button class="btn-copy" id="copyOrder">複製訂單明細</button>
+    </div>`;
+  $("#orderPreview").textContent = buildOrderText();
+  $("#backToCart").onclick = renderDrawer;
+  ["f-name","f-phone","f-date","f-method","f-note"].forEach(id=>{
+    document.getElementById(id).addEventListener("input", ()=>{ $("#orderPreview").textContent = buildOrderText(); });
+  });
+  $("#payNow").onclick = payWithEcpay;
+  $("#sendLine").onclick = sendViaLine;
+  $("#copyOrder").onclick = ()=>{ copyText(buildOrderText()); };
+}
+
+/* ---- 產生訂單文字 ---- */
+function buildOrderText(){
+  const v = id => (document.getElementById(id)?.value || "").trim();
+  const items = cartItems();
+  let t = `【${SHOP.name} 訂單】\n`;
+  t += "──────────\n";
+  items.forEach(i=>{ t += `・${i.name} x${i.qty}　${fmt(i.price*i.qty)}\n`; });
+  t += "──────────\n";
+  t += `合計：${fmt(cartTotal())}\n\n`;
+  t += `姓名：${v("f-name")||"（未填）"}\n`;
+  t += `電話：${v("f-phone")||"（未填）"}\n`;
+  t += `取貨日：${v("f-date")||"（未填）"}\n`;
+  t += `取貨方式：${v("f-method")||"（未填）"}\n`;
+  const note = v("f-note"); if(note) t += `備註：${note}\n`;
+  return t;
+}
+
+/* ---- 送出方式 ---- */
+function payWithEcpay(){
+  if(!validate()) return;
+  if(!SHOP.payEndpoint || SHOP.payEndpoint.includes("你的子網域")){
+    toast("尚未設定付款端點，請先部署 worker.js"); return;
+  }
+  const v = id => (document.getElementById(id)?.value || "").trim();
+  const order = {
+    items: cartItems().map(i=>({ id:i.id, qty:i.qty })),  // 金額由後端依 id 重算，防竄改
+    customer: { name:v("f-name"), phone:v("f-phone"), date:v("f-date"), method:v("f-method"), note:v("f-note") }
+  };
+  // 以表單 POST 整頁導向 Worker，Worker 會回傳自動送往綠界的付款頁
+  const f = document.createElement("form");
+  f.method = "POST"; f.action = SHOP.payEndpoint;
+  const inp = document.createElement("input");
+  inp.type = "hidden"; inp.name = "order"; inp.value = JSON.stringify(order);
+  f.appendChild(inp); document.body.appendChild(f);
+  toast("正在前往安全付款頁…");
+  f.submit();
+}
+function sendViaLine(){
+  copyText(buildOrderText(), false);
+  toast("訂單已複製，請在 LINE 貼上送出 💬");
+  setTimeout(()=>window.open(SHOP.lineUrl, "_blank","noopener"), 600);
+}
+function validate(){
+  const name = document.getElementById("f-name").value.trim();
+  const phone = document.getElementById("f-phone").value.trim();
+  if(!name || !phone){ toast("請先填寫姓名與電話"); return false; }
+  return true;
+}
+function copyText(text, withToast=true){
+  navigator.clipboard?.writeText(text).then(()=>{ if(withToast) toast("已複製訂單明細 ✓"); })
+    .catch(()=>{ if(withToast) toast("複製失敗，請手動選取"); });
+}
+
+/* ---- 抽屜開關 ---- */
+function openCart(){ renderDrawer(); $("#drawer").classList.add("open"); $("#overlay").classList.add("open"); $("#drawer").setAttribute("aria-hidden","false"); }
+function closeCart(){ $("#drawer").classList.remove("open"); $("#overlay").classList.remove("open"); $("#drawer").setAttribute("aria-hidden","true"); }
+
+/* ---- toast ---- */
+let toastTimer;
+function toast(msg){
+  const el = $("#toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove("show"), 2200);
+}
+
+/* ---- 儲存（GitHub Pages 上可正常使用 localStorage）---- */
+function saveCart(){ try{ localStorage.setItem("yamybake_cart", JSON.stringify(cart)); }catch(e){} }
+function loadCart(){ try{ return JSON.parse(localStorage.getItem("yamybake_cart")) || {}; }catch(e){ return {}; } }
+
+/* ---- 事件綁定 ---- */
+$("#openCart").onclick = openCart;
+$("#closeCart").onclick = closeCart;
+$("#overlay").onclick = closeCart;
+$("#menuToggle").onclick = ()=> $("#navLinks").classList.toggle("show");
+$("#navLinks").querySelectorAll("a").forEach(a=>a.onclick=()=>$("#navLinks").classList.remove("show"));
+$("#lineFoot").href = SHOP.lineUrl;
+$("#yr").textContent = new Date().getFullYear();
+
+/* ---- 捲動淡入 ---- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* ---- 初始化 ---- */
+renderCats(); renderGrid(); updateCount();
+</script>
+</body>
+</html>

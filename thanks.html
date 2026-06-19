@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>謝謝你的訂購 ・ yamybake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#FBF5EC;--ink:#2E211A;--ink-soft:#6B5A4E;--berry:#CC4A63;--line:rgba(46,33,26,.14)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--paper);color:var(--ink);
+    font-family:"Noto Sans TC",sans-serif;padding:30px;text-align:center}
+  .card{max-width:480px;background:#FFFCF6;border:1px solid var(--line);border-radius:22px;padding:48px 38px;
+    box-shadow:0 22px 50px -28px rgba(46,33,26,.5)}
+  .seal{width:78px;height:78px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;
+    margin:0 auto 24px;font-size:2rem}
+  h1{font-family:"Noto Serif TC",serif;font-size:1.8rem;margin:0 0 10px}
+  .en{font-family:"Fraunces",serif;font-style:italic;color:var(--berry)}
+  p{color:var(--ink-soft);line-height:1.8;margin:0 0 8px}
+  .order{background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:14px;margin:22px 0;font-size:.92rem}
+  .order b{font-family:"Fraunces",serif}
+  a.btn{display:inline-block;margin-top:18px;background:var(--berry);color:#fff;text-decoration:none;
+    padding:13px 28px;border-radius:999px;font-weight:600;transition:transform .18s}
+  a.btn:hover{transform:translateY(-2px)}
+  .note{font-size:.82rem;margin-top:18px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="seal">🧁</div>
+    <h1>謝謝你的訂購！</h1>
+    <p class="en">thank you</p>
+    <p>你的訂單已送出。我們收到付款後會盡快為你安排製作與出貨，<br>並透過你留下的聯絡方式通知你。</p>
+    <div class="order" id="orderBox">訂單編號處理中…</div>
+    <a class="btn" href="./index.html">← 回到商店</a>
+    <p class="note">如需修改訂單或有任何問題，歡迎透過 Instagram 或 LINE 與我們聯絡。</p>
+  </div>
+<script>
+  // 綠界會在網址帶上部分參數（依設定而定），這裡盡量顯示訂單編號／金額
+  const q = new URLSearchParams(location.search);
+  const no = q.get("MerchantTradeNo") || q.get("TradeNo") || "";
+  const amt = q.get("TradeAmt") || q.get("TotalAmount") || "";
+  const box = document.getElementById("orderBox");
+  if(no || amt){
+    box.innerHTML = (no?`訂單編號 <b>${no}</b><br>`:"") + (amt?`金額 <b>NT$${amt}</b>`:"");
+  } else {
+    box.textContent = "若已完成付款，訂單已成立，謝謝你 🙏";
+  }
+</script>
+</body>
+</html>
